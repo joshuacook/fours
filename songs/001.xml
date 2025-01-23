@@ -1,11 +1,11 @@
 <title>"Coyote Movement III"</title>
-<bpm>87</bpm>
-<drum>
+<tempo>87</tempo>
+<beat>
   0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 
   2 0 1 0 2 0 1 0 2 0 1 0 2 0 1 0 
   0 0 0 0 2 0 0 0 0 0 0 0 2 0 0 0 
   2 0 0 0 0 0 0 0 2 0 0 0 0 0 0 0 
-</drum>
+</beat>
 <samples>
   <sample>
     <name>coyote_movement_iii_001</name>
