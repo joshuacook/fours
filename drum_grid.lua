@@ -88,15 +88,27 @@ function step()
     clock.sync(1/4) -- Sync to quarter notes
     
     if playing then
-      -- Play current step
-      for track = 1,4 do
+      -- Play current step with voice stealing
+      -- Check high priority sounds first (1 & 3)
+      for track = 1,4,2 do
         local vol = current_song.beats[track][current_step]
         if vol > 0 then
-          local voice = track <= 2 and 1 or 2  -- Tracks 1-2 use voice 1, 3-4 use voice 2
-          local pos = (track - 1) * 2  -- Each track gets its own 2s region
+          local voice = track <= 2 and 1 or 2
+          local pos = (track - 1) * 2
           softcut.position(voice, pos)
-          softcut.level(voice, vol * 0.5)  -- Scale volume 0-2 to 0-1
+          softcut.level(voice, vol * 0.5)
           softcut.play(voice, 1)
+        else
+          -- If high priority sound isn't playing, check low priority sound
+          local low_priority_track = track + 1
+          local vol = current_song.beats[low_priority_track][current_step]
+          if vol > 0 then
+            local voice = low_priority_track <= 2 and 1 or 2
+            local pos = (low_priority_track - 1) * 2
+            softcut.position(voice, pos)
+            softcut.level(voice, vol * 0.5)
+            softcut.play(voice, 1)
+          end
         end
       end
       
