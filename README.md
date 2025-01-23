@@ -35,5 +35,3 @@
 
 - **Norns**: The main platform for running the software, handling audio processing, and interfacing with the Grid.
 - **Grid**: A tactile interface for programming beats and controlling playback.
-
-Feel free to adjust or expand as needed!```
