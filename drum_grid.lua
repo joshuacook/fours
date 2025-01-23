@@ -65,6 +65,7 @@ end
 
 function init()
   init_softcut()
+  clock.run(grid_redraw_clock)
   
   -- Initialize default song data
   current_song = {
@@ -116,6 +117,11 @@ function step()
       current_step = current_step % 16 + 1
       grid_dirty = true
       screen_dirty = true
+    end
+    
+    -- Always redraw grid even when not playing
+    if grid_dirty then
+      grid_redraw()
     end
   end
 end
@@ -214,4 +220,13 @@ function key(n,z)
   end
   grid_dirty = true
   screen_dirty = true
+end
+-- Separate clock for grid updates
+function grid_redraw_clock()
+  while true do
+    clock.sleep(1/30) -- 30fps grid refresh
+    if grid_dirty then
+      grid_redraw()
+    end
+  end
 end
