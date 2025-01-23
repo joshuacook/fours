@@ -130,18 +130,13 @@ end
 function g.key(x,y,z)
   if z == 1 then -- Only handle key down
     if y <= 4 then -- Beat programming area
-      local track = 5-y -- Convert from bottom-up
+      local track = y -- Row 1 = track 1, Row 4 = track 4
       local step = x
       -- Cycle through volumes: 0 -> 1 -> 2 -> 0
       current_song.beats[track][step] = (current_song.beats[track][step] + 1) % 3
       grid_dirty = true
-    elseif y >= 5 and y <= 8 then -- Volume editing area
-      if x <= 3 then -- Only use first 3 columns for volume
-        local track = 9-y -- Convert from bottom-up (row 8=track 1, row 5=track 4)
-        current_song.beats[track][current_step] = x - 1 -- 0,1,2
-        grid_dirty = true
-      end
     end
+    -- Ignoring rows 5-8 for now
   end
 end
 
@@ -153,21 +148,10 @@ function grid_redraw()
   -- Draw sequence (top 4 rows)
   for track = 1,4 do
     for step = 1,16 do
-      local y = 5-track
+      local y = track -- Row 1 = track 1, Row 4 = track 4
       local brightness = current_song.beats[track][step] * 5 + 
                         (step == current_step and playing and 5 or 0)
       g:led(step,y,brightness)
-    end
-  end
-  
-  -- Draw current beat editor (bottom 4 rows)
-  for track = 1,4 do
-    local y = 9-track -- Rows 5-8 from bottom up
-    local vol = current_song.beats[track][current_step]
-    -- Light up volume indicators (0-2)
-    for v = 0,2 do
-      local brightness = v <= vol and 15 or 3
-      g:led(v+1,y,brightness)
     end
   end
   
