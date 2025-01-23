@@ -14,6 +14,11 @@
 local g = grid.connect()
 local grid_dirty = true
 local screen_dirty = true
+local AUDIO_DIRECTORY = norns.state.path .. "audio/"
+local drum_1 = AUDIO_DIRECTORY .. "common/808/808-BD.wav"
+local drum_2 = AUDIO_DIRECTORY .. "common/808/808-SD.wav"
+local drum_3 = AUDIO_DIRECTORY .. "common/808/808-CH.wav"
+local drum_4 = AUDIO_DIRECTORY .. "common/808/808-OH.wav"
 
 -- Global state
 local playing = false
