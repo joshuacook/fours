@@ -129,8 +129,8 @@ end
 -- Grid event handler
 function g.key(x,y,z)
   if z == 1 then -- Only handle key down
-    if y <= 4 then -- Beat programming area
-      local track = y -- Row 1 = track 1, Row 4 = track 4
+    if y >= 5 and y <= 8 then -- Beat programming area
+      local track = y - 4 -- Row 5 = track 1, Row 8 = track 4
       local step = x
       -- Cycle through volumes: 0 -> 1 -> 2 -> 0
       current_song.beats[track][step] = (current_song.beats[track][step] + 1) % 3
@@ -148,7 +148,7 @@ function grid_redraw()
   -- Draw sequence (top 4 rows)
   for track = 1,4 do
     for step = 1,16 do
-      local y = track -- Row 1 = track 1, Row 4 = track 4
+      local y = track + 4 -- Row 5 = track 1, Row 8 = track 4
       local brightness = current_song.beats[track][step] * 5 + 
                         (step == current_step and playing and 5 or 0)
       g:led(step,y,brightness)
