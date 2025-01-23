@@ -14,7 +14,7 @@
 local g = grid.connect()
 local grid_dirty = true
 local screen_dirty = true
-local AUDIO_DIRECTORY = norns.state.path .. "audio/"
+local AUDIO_DIRECTORY = _path.audio
 local drum_1 = AUDIO_DIRECTORY .. "common/808/808-BD.wav"
 local drum_2 = AUDIO_DIRECTORY .. "common/808/808-SD.wav"
 local drum_3 = AUDIO_DIRECTORY .. "common/808/808-CH.wav"
@@ -28,7 +28,12 @@ local selected_beat = 1
 
 -- Load sample into softcut buffer
 function load_sample(file_path, buffer, start_pos)
-  softcut.buffer_read_mono(file_path, 0, start_pos, 2, 1, 1)
+  if util.file_exists(file_path) then
+    print("Loading " .. file_path)
+    softcut.buffer_read_mono(file_path, 0, start_pos, -1, 1, 1)
+  else
+    print("File not found: " .. file_path)
+  end
 end
 
 -- Initialize softcut
@@ -37,10 +42,14 @@ function init_softcut()
   softcut.buffer_clear()
   
   -- Load all samples into buffer 1 (2 second regions)
+  softcut.buffer_clear_region(1, 0, 32)
+  
+  print("Loading samples...")
   load_sample(drum_1, 1, 0)   -- 0-2s
   load_sample(drum_2, 1, 2)   -- 2-4s
   load_sample(drum_3, 1, 4)   -- 4-6s
   load_sample(drum_4, 1, 6)   -- 6-8s
+  print("Samples loaded")
   
   -- Configure voices
   for v = 1,2 do
