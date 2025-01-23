@@ -36,16 +36,16 @@ function init_softcut()
   -- Clear both buffers
   softcut.buffer_clear()
   
-  -- Load samples (2 second regions)
-  load_sample(drum_1, 1, 0)  -- 0-2s
-  load_sample(drum_2, 1, 2)  -- 2-4s
-  load_sample(drum_3, 2, 0)  -- 0-2s
-  load_sample(drum_4, 2, 2)  -- 2-4s
+  -- Load all samples into buffer 1 (2 second regions)
+  load_sample(drum_1, 1, 0)   -- 0-2s
+  load_sample(drum_2, 1, 2)   -- 2-4s
+  load_sample(drum_3, 1, 4)   -- 4-6s
+  load_sample(drum_4, 1, 6)   -- 6-8s
   
   -- Configure voices
   for v = 1,2 do
     softcut.enable(v,1)
-    softcut.buffer(v,v)  -- voice 1->buf 1, voice 2->buf 2
+    softcut.buffer(v,1)  -- both voices use buffer 1
     softcut.level(v,1.0)
     softcut.position(v,0)
     softcut.play(v,0)
@@ -93,7 +93,7 @@ function step()
         local vol = current_song.beats[track][current_step]
         if vol > 0 then
           local voice = track <= 2 and 1 or 2  -- Tracks 1-2 use voice 1, 3-4 use voice 2
-          local pos = track % 2 == 1 and 0 or 2  -- Odd tracks start at 0s, even at 2s
+          local pos = (track - 1) * 2  -- Each track gets its own 2s region
           softcut.position(voice, pos)
           softcut.level(voice, vol * 0.5)  -- Scale volume 0-2 to 0-1
           softcut.play(voice, 1)
