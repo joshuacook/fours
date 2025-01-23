@@ -26,30 +26,41 @@ local current_step = 1
 local current_track = 1
 local selected_beat = 1
 
+-- Load sample into softcut buffer
+function load_sample(file_path, buffer, start_pos)
+  softcut.buffer_read_mono(file_path, 0, start_pos, 2, 1, 1)
+end
+
 -- Initialize softcut
 function init_softcut()
-  -- Voice 1 for drums 1-2
+  -- Clear both buffers
   softcut.buffer_clear()
-  softcut.enable(1,1)
-  softcut.buffer(1,1)
-  softcut.level(1,1.0)
-  softcut.position(1,0)
-  softcut.play(1,0)
-  softcut.rate(1,1.0)
-  softcut.loop(1,0)
-  softcut.loop_start(1,0)
-  softcut.loop_end(1,1)
   
-  -- Voice 2 for drums 3-4  
-  softcut.enable(2,1)
-  softcut.buffer(2,1)
-  softcut.level(2,1.0)
-  softcut.position(2,0)
-  softcut.play(2,0)
-  softcut.rate(2,1.0)
-  softcut.loop(2,0)
-  softcut.loop_start(2,0)
-  softcut.loop_end(2,1)
+  -- Load samples (2 second regions)
+  load_sample(drum_1, 1, 0)  -- 0-2s
+  load_sample(drum_2, 1, 2)  -- 2-4s
+  load_sample(drum_3, 2, 0)  -- 0-2s
+  load_sample(drum_4, 2, 2)  -- 2-4s
+  
+  -- Configure voices
+  for v = 1,2 do
+    softcut.enable(v,1)
+    softcut.buffer(v,v)  -- voice 1->buf 1, voice 2->buf 2
+    softcut.level(v,1.0)
+    softcut.position(v,0)
+    softcut.play(v,0)
+    softcut.rate(v,1.0)
+    softcut.loop(v,0)
+    softcut.rec(v,0)
+    
+    -- Cut mode settings
+    softcut.pre_level(v,0)
+    softcut.pre_filter_dry(v,0)
+    softcut.pre_filter_lp(v,1.0)
+    softcut.pre_filter_hp(v,1.0)
+    softcut.pre_filter_bp(v,1.0)
+    softcut.pre_filter_br(v,1.0)
+  end
 end
 
 function init()
@@ -81,7 +92,11 @@ function step()
       for track = 1,4 do
         local vol = current_song.beats[track][current_step]
         if vol > 0 then
-          -- TODO: Trigger appropriate softcut voice with volume
+          local voice = track <= 2 and 1 or 2  -- Tracks 1-2 use voice 1, 3-4 use voice 2
+          local pos = track % 2 == 1 and 0 or 2  -- Odd tracks start at 0s, even at 2s
+          softcut.position(voice, pos)
+          softcut.level(voice, vol * 0.5)  -- Scale volume 0-2 to 0-1
+          softcut.play(voice, 1)
         end
       end
       
