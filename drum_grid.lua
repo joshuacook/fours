@@ -62,13 +62,17 @@ function init_softcut()
     softcut.loop(v,0)
     softcut.rec(v,0)
     
-    -- Cut mode settings
-    softcut.pre_level(v,0)
-    softcut.pre_filter_dry(v,0)
-    softcut.pre_filter_lp(v,1.0)
-    softcut.pre_filter_hp(v,1.0)
-    softcut.pre_filter_bp(v,1.0)
-    softcut.pre_filter_br(v,1.0)
+    -- Voice settings
+    softcut.fade_time(v,0.0)
+    softcut.level_slew_time(v,0.0)
+    softcut.pan(v,0)
+    
+    -- Filter settings
+    softcut.post_filter_dry(v,1.0)
+    softcut.post_filter_lp(v,1.0)
+    softcut.post_filter_hp(v,0.0)
+    softcut.post_filter_bp(v,0.0)
+    softcut.post_filter_br(v,0.0)
   end
 end
 
@@ -105,9 +109,10 @@ function step()
         if vol > 0 then
           local voice = track <= 2 and 1 or 2
           local pos = (track - 1) * 2
-          softcut.position(voice, pos)
           softcut.level(voice, vol * 0.5)
+          softcut.position(voice, pos)
           softcut.play(voice, 1)
+          print("Playing track " .. track .. " at pos " .. pos .. " with vol " .. vol)
         else
           -- If high priority sound isn't playing, check low priority sound
           local low_priority_track = track + 1
