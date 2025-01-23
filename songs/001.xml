@@ -1,0 +1,34 @@
+<title>"Coyote Movement III"</title>
+<bpm>87</bpm>
+<drum>
+  0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 
+  0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 
+  0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 
+  0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 
+</drum>
+<samples>
+  <sample>
+    <name>coyote_movement_iii_001</name>
+    <path>coyote_movement_iii_001.wav</path>
+    <length>2</length>
+    <volume>0.5</volume>
+  </sample>
+  <sample>
+    <name>coyote_movement_iii_002</name>
+    <path>coyote_movement_iii_002.wav</path>
+    <length>1</length>
+    <volume>0.5</volume>
+  </sample>
+  <sample>
+    <name>coyote_movement_iii_003</name>
+    <path>coyote_movement_iii_003.wav</path>
+    <length>1</length>
+    <volume>0.5</volume>
+  </sample>
+  <sample>
+    <name>coyote_movement_iii_004</name>
+    <path>coyote_movement_iii_004.wav</path>
+    <length>1</length>
+    <volume>0.5</volume>
+  </sample>
+</samples>
